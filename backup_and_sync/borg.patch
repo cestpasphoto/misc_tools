@@ -1,0 +1,17 @@
+--- src/borg/archiver.py	2021-10-05 17:32:20.617623584 +0200
++++ /usr/lib/python3/dist-packages/borg/archiver.py	2021-07-06 11:09:27.589969371 +0200
+@@ -1416,6 +1416,14 @@
+         """Mount archive or an entire repository as a FUSE filesystem"""
+         # Perform these checks before opening the repository and asking for a passphrase.
+ 
++        if args.options:
++            options = args.options.split(',')
++            if 'bypasslock' in options:
++                #print('intercepting bypasslock option')
++                options.remove('bypasslock')
++                args.options = ','.join(options)
++                args.lock = False
++
+         try:
+             import borg.fuse
+         except ImportError as e:
